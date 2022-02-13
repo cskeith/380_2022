@@ -5,7 +5,7 @@
         <title>Index page</title>
     </head>
     <body>
-        <jsp:useBean id="visit" scope="request"
+        <jsp:useBean id="visit" scope="application"
                      class="hkmu.comps380f.VisitCounter" />
         <jsp:setProperty name="visit" property="count"
                          value='<%= visit.getCount() + 1%>'/>
