@@ -9,13 +9,13 @@
         <%  
             String[] fruits = request.getParameterValues("fruit");
             if (fruits == null) {
-                out.println("  You did not select any fruits\r\n");
-            } else {
         %>
+        You did not select any fruits
+        <% } else { %>
         <ul>
-            <% for (String fruit : fruits) { 
-                out.println("  <li>" + fruit + "</li>\r\n");
-            }%>
+            <% for (String fruit : fruits) { %> 
+            <li><%= fruit %></li>
+            <% }%>
         </ul>            
         <% } %>
     </body>
