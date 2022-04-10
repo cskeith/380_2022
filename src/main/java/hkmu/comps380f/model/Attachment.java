@@ -3,11 +3,13 @@ package hkmu.comps380f.model;
 import java.io.Serializable;
 
 public class Attachment implements Serializable {
+
     private String name;
     private String mimeContentType;
     private byte[] contents;
+    private long ticketId;
 
-    // Getters and Setters of name, mimeContentType, contents
+    // getters and setters of all properties
     public String getName() {
         return name;
     }
@@ -32,5 +34,12 @@ public class Attachment implements Serializable {
         this.contents = contents;
     }
 
-}
+    public long getTicketId() {
+        return ticketId;
+    }
 
+    public void setTicketId(long ticketId) {
+        this.ticketId = ticketId;
+    }
+
+}
