@@ -2,11 +2,18 @@
 <b:beans xmlns="http://www.springframework.org/schema/security"
          xmlns:b="http://www.springframework.org/schema/beans"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xmlns:tx="http://www.springframework.org/schema/tx"
+
 
          xsi:schemaLocation="http://www.springframework.org/schema/beans
                       http://www.springframework.org/schema/beans/spring-beans.xsd
                       http://www.springframework.org/schema/security               
                       http://www.springframework.org/schema/security/spring-security.xsd
+                      http://www.springframework.org/schema/context
+                      http://www.springframework.org/schema/context/spring-context.xsd
+                      http://www.springframework.org/schema/tx
+                      http://www.springframework.org/schema/tx/spring-tx.xsd
 ">
     <b:bean id="dataSource"
             class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -17,6 +24,7 @@
     </b:bean> 
 
     <http>
+        <intercept-url pattern="/user/**" access="hasRole('ADMIN')" /> 
         <intercept-url pattern="/ticket/delete/**" access="hasRole('ADMIN')" /> 
         <intercept-url pattern="/ticket/**" access="hasAnyRole('USER','ADMIN')" />
         <form-login login-page="/cslogin" login-processing-url="/cslogin"
@@ -26,13 +34,17 @@
         <remember-me key="custSupportSecret" token-validity-seconds="86400" />
     </http>
 
+    <b:bean id="transactionManager" 
+            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <b:property name="dataSource" ref="dataSource" />
+    </b:bean>
+
+    <!-- Enable annotation driven transaction management -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <context:component-scan base-package="hkmu.comps380f.dao" />
+
     <authentication-manager>
-        <authentication-provider>
-            <jdbc-user-service data-source-ref="dataSource"
-                               users-by-username-query=
-                "SELECT username, password, true FROM users WHERE username=?"
-                               authorities-by-username-query=
-                "SELECT username, role FROM user_roles WHERE username=?" />
-        </authentication-provider>        
+        <authentication-provider user-service-ref="ticketUserService" />
     </authentication-manager>
 </b:beans>
