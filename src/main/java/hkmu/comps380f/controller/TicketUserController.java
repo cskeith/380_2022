@@ -4,6 +4,8 @@ import hkmu.comps380f.dao.TicketUserRepository;
 import hkmu.comps380f.model.TicketUser;
 import java.io.IOException;
 import javax.annotation.Resource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ public class TicketUserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @GetMapping({"", "/list"})
     public String list(ModelMap model) {
@@ -75,12 +79,14 @@ public class TicketUserController {
                 passwordEncoder.encode(form.getPassword()),
                 form.getRoles());
         ticketUserRepo.save(user);
+        logger.info("User " + form.getUsername() + " created.");
         return new RedirectView("/user/list", true);
     }
 
     @GetMapping("/delete/{username}")
     public View deleteTicket(@PathVariable("username") String username) {
         ticketUserRepo.delete(ticketUserRepo.findById(username).orElse(null));
+        logger.info("User " + username + " deleted.");
         return new RedirectView("/user/list", true);
     }
 }
