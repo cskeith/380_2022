@@ -4,6 +4,8 @@ import hkmu.comps380f.dao.TicketUserRepository;
 import hkmu.comps380f.model.TicketUser;
 import java.io.IOException;
 import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,9 @@ public class TicketUserController {
 
     @Resource
     TicketUserRepository ticketUserRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping({"", "/list"})
     public String list(ModelMap model) {
@@ -67,7 +72,8 @@ public class TicketUserController {
     @PostMapping("/create")
     public View create(Form form) throws IOException {
         TicketUser user = new TicketUser(form.getUsername(),
-                form.getPassword(), form.getRoles());
+                passwordEncoder.encode(form.getPassword()),
+                form.getRoles());
         ticketUserRepo.save(user);
         return new RedirectView("/user/list", true);
     }
