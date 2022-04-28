@@ -23,4 +23,6 @@
         <property name="prefix" value="/WEB-INF/jsp/view/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    
+    <bean id="userValidator" class="hkmu.comps380f.validator.UserValidator" />
 </beans>

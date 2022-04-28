@@ -2,6 +2,7 @@ package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.TicketUserRepository;
 import hkmu.comps380f.model.TicketUser;
+import hkmu.comps380f.validator.UserValidator;
 import java.io.IOException;
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -29,6 +30,9 @@ public class TicketUserController {
 
     @Resource
     TicketUserRepository ticketUserRepo;
+
+    @Autowired
+    private UserValidator userValidator;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -98,6 +102,8 @@ public class TicketUserController {
     @PostMapping("/create")
     public String create(@ModelAttribute("ticketUser") @Valid Form form,
             BindingResult result) throws IOException {
+        userValidator.validate(form, result);
+
         if (result.hasErrors()) {
             return "addUser";
         }
